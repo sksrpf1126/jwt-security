@@ -1,6 +1,8 @@
 package back.auth.review.service;
 
+import back.auth.review.dto.user.request.UserLoginRequest;
 import back.auth.review.dto.user.request.UserRequest;
+import back.auth.review.dto.user.response.UserLoginResponse;
 import back.auth.review.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,11 @@ public class UserService {
     @Transactional
     public void join(UserRequest userRequest) {
         userMapper.insertUser(userRequest);
+    }
+
+    @Transactional(readOnly = true)
+    public UserLoginResponse login(UserLoginRequest userLoginRequest) {
+        return userMapper.selectUser(userLoginRequest);
     }
 
 }

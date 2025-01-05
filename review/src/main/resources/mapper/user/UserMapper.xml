@@ -19,4 +19,13 @@
         )
     </insert>
 
+    <select id="selectUser" parameterType="back.auth.review.dto.user.request.UserLoginRequest" resultType="back.auth.review.dto.user.response.UserLoginResponse">
+        /* selectUser */
+        SELECT USER_ID AS userId
+             , EMAIL AS email
+             , ROLE AS role
+          FROM TCMN_USER
+         WHERE ACCOUNT_ID = #{accountId}
+           AND PWD = #{pwd}
+    </select>
 </mapper>
