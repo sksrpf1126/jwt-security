@@ -48,7 +48,6 @@ public class UserController {
 
     private ResponseCookie createCookie(String accessToken) {
         return ResponseCookie.from("accessToken", accessToken)
-                .sameSite("None")
                 .httpOnly(true)
                 .build();
     }
