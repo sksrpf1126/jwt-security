@@ -3,19 +3,20 @@ package back.auth.review.controller;
 import back.auth.review.dto.user.request.UserLoginRequest;
 import back.auth.review.dto.user.request.UserRequest;
 import back.auth.review.dto.user.response.UserLoginResponse;
+import back.auth.review.dto.user.response.UserAuthResponse;
+import back.auth.review.mapper.UserMapper;
 import back.auth.review.security.JwtTokenProvider;
 import back.auth.review.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/api/user/join")
@@ -31,11 +32,16 @@ public class UserController {
         HttpHeaders headers = null;
 
         if(loginUser.getUserId() != null) {
-            String accessToken = jwtTokenProvider.createAccessToken(loginUser.getEmail(), loginUser.getRole());
+            String accessToken = jwtTokenProvider.createAccessToken(loginUser.getUserId(), loginUser.getRole());
             headers = createHeaders(accessToken);
         }
 
         return new ResponseEntity<>(loginUser, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/{userId}/menus")
+    public UserAuthResponse selectUserMenus(@PathVariable("userId") int userId) {
+        return userMapper.selectUserMenus(userId);
     }
 
     private HttpHeaders createHeaders(String accessToken) {

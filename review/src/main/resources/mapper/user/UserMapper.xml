@@ -22,10 +22,34 @@
     <select id="selectUser" parameterType="back.auth.review.dto.user.request.UserLoginRequest" resultType="back.auth.review.dto.user.response.UserLoginResponse">
         /* selectUser */
         SELECT USER_ID AS userId
+             , ACCOUNT_ID AS accountId
              , EMAIL AS email
              , ROLE AS role
           FROM TCMN_USER
          WHERE ACCOUNT_ID = #{accountId}
            AND PWD = #{pwd}
+    </select>
+
+    <resultMap id="UserResultMap" type="UserAuthResponse">
+        <id property="userId" column="USER_ID"/>
+        <id property="accountId" column="ACCOUNT_ID"/>
+        <id property="email" column="EMAIL"/>
+        <id property="role" column="ROLE"/>
+
+        <collection property="menuAuths" ofType="string">
+            <result column="MENU_AUTH"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectUserMenus" parameterType="int" resultMap="UserResultMap">
+        SELECT USER.USER_ID
+             , USER.ACCOUNT_ID
+             , USER.EMAIL
+             , USER.ROLE
+             , MENU.MENU_AUTH
+          FROM TCMN_USER USER
+         INNER JOIN TCMN_USER_MENU_MAPP USERMM ON USERMM.USER_ID = USER.USER_ID
+         INNER JOIN TCMN_MENU MENU ON MENU.MENU_ID = USERMM.MENU_ID
+         WHERE USER.USER_ID = #{userId}
     </select>
 </mapper>

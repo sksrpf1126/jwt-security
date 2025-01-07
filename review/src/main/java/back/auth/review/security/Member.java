@@ -1,14 +1,16 @@
-package back.auth.review.dto.user.response;
+package back.auth.review.security;
 
 import back.auth.review.common.enumType.UserRoleType;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class UserLoginResponse {
-    private Integer userId;
+@Builder
+public class Member {
+
+    private int userId;
     private String accountId;
     private String email;
     private UserRoleType role;
+
 }
